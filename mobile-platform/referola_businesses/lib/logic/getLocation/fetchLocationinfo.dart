@@ -1,71 +1,62 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
-import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
-import 'package:android_intent/android_intent.dart';
 
 
 class LocData{
   double lat;
   double long;
+  List<Placemark> address;
 
-
-  LocData({this.lat, this.long});
+  LocData({this.lat, this.long, this.address});
 }
 
 class GetLocation{
   Future<LocData> fetch(BuildContext context)async{
-    Position position;
-    bool _serviceEnabled;
-    Location location = new Location();
+    Location location = Location();
+    LocationData _locationData;
+    LocationLogic locationLogic = LocationLogic();
+    List currAddress;
+
+    if(await locationLogic.verifyPermission()){
+      _locationData = await location.getLocation();
+    }
     
-    // if(await Permission.location.isDenied || await Permission.location.isRestricted || await Permission.location.isPermanentlyDenied){
-    //   CustomAlertBox().load(context, "Please Turn On your Location", "You need to turn on your Location for this!");
-    //   await Permission.location.request().then((PermissionStatus status)async{
-    //     if(status.isGranted){
-    //       Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
-    //       if(await geolocator.isLocationServiceEnabled()){
-    //         position = await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    //         placeMark = await geolocator.placemarkFromPosition(position);
-    //       }
-    //     }return LocData(lat: position.latitude, long: position.longitude, placeMark: placeMark);
-    //   });
-    // }
-
-    // if(await Permission.location.isGranted){
-    //   Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
-    //   if(await geolocator.isLocationServiceEnabled()){
-    //     position = await geolocator.getCurrentPosition();
-    //     placeMark = await geolocator.placemarkFromPosition(position);
-    //   }
-    // }
-
-      
-     
-
-      try{
-        position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        final coordinates = new Coordinates(position.latitude, position.longitude);
-        var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-        var first = addresses.first;
-        print(first.addressLine);
-      } on PlatformException catch (e) {
-        if (e.code == 'PERMISSION_DENIED') {
-          CustomAlertBox().load(context, "Please Turn On your Location", "You need to turn on your Location for this!");
-        }
-        if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-          CustomAlertBox().load(context, "Please Turn On your Location", "You need to turn on your Location for this!");
-        }
-      
-        
-
-
-
-   
+    currAddress = await Geolocator().placemarkFromCoordinates(_locationData.latitude, _locationData.longitude);  
+    print(currAddress);
+    return LocData(
+      lat: _locationData.latitude,
+      long: _locationData.longitude,
+      address: currAddress
+    );
   }
-   return LocData(lat: position.latitude, long: position.longitude);
 }
+
+class LocationLogic{
+  Location location = new Location();
+
+  Future<bool> verifyPermission()async{
+    
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return false;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied ) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return false;
+      }
+    }
+
+    return _serviceEnabled;
+  }
 
 }

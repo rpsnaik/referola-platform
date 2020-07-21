@@ -1,0 +1,140 @@
+{
+    "users": [
+        // Sub Document
+        {
+            "uid": "String",
+            "name": "String",
+            "emailId": "String",
+            "contactNum": "String",
+            "dateOfBirth": "String",
+            "profileImageUrl": "String",
+            "latitude": "Double",
+            "longitude": "Double",
+            "addressName": "String",
+            "addressLocality": "String",
+            "addressSubAdministrativeArea": "String",
+            "addressAdministrativeArea": "String",
+            "addressCountry": "String",
+            "addressPincode": "String",
+
+            "accountCreatedOn": "Timestamp",
+
+            "wallet": "Double"
+        }
+    ],
+
+    "usersWithDrawTransactions": [
+        // Sub Document
+        {
+            "withDrawId": "String",
+            "withDrawAmount": "Double",
+            "withDrawInfo": "String"
+        }
+    ],
+
+    "businessUsers": [
+        // Sub Document
+        {
+            "uid": "String",
+            "name": "String",
+            "emailId": "String",
+            "contactNum": "String",
+            "dateOfBirth": "String",
+            "profileImageUrl": "String",
+            "accountDisabled": "Boolean",
+
+            "accountCreatedOn": "Timestamp"
+        }
+    ],
+
+    "businesses": [
+        // Sub Document
+        {
+            "businessDisabled": "Boolean",
+            "businessesId": "String",
+            "businessTitle": "String",
+            "businessShortDescription": "String",
+            "businessEmailId": "String",
+            "businessContactNumber": "String",
+            "businessProfileImgUrl": "String",
+            "businessBannerImgUrl": "String",
+            "latitude": "Double",
+            "longitude": "Double",
+            "addressName": "String",
+            "addressLocality": "String",
+            "addressSubAdministrativeArea": "String",
+            "addressAdministrativeArea": "String",
+            "addressCountry": "String",
+            "addressPincode": "String",
+
+            "businessOwnerId": "String (uid)",
+            "businessUserOn": "Timestamp",
+
+            "wallet": "Double"
+        }
+    ],
+
+    "campains": [
+        //Sub Document
+        {
+            "campainId": "String",
+            "campainStatus": "Boolean - true (Active), false (InActive)",
+            "campainTitle": "String",
+            "campainSubTitle": "String",
+            "campainDescription": "String",
+            "campainBannerImgUrl": "String",
+            "campainCreatedOn": "String",
+            "camapinUpdatedOn": "String",
+            "categories": "List<String>",
+            "packages": "List<Map<String, dynamic>>",
+            "packages (Ex)": [
+                {
+                    "packageTitle": "2 Implamtations",
+                    "packageAmount": "200",
+                    "packageDiscount": "20",
+                    "packageRewardAmount": "3"
+                },
+                {
+                    "packageTitle": "4 Implamtations",
+                    "packageAmount": "320",
+                    "packageDiscount": "20",
+                    "packageRewardAmount": "7"
+                }
+            ]
+        }
+    ],
+
+    "orders": [
+        //Sub Document
+        {
+            "orderId": "String",
+            "orderByUserId": "String",
+            "orderForCampainId": "String",
+            "orderPackageInfo": {
+                "packageTitle": "4 Implamtations",
+                "packageAmount": "320",
+                "packageDiscount": "20",
+                "packageRewardAmount": "7"
+            },
+            "amountPaidByUser": "Double",
+            "orderInfo": "String",
+            "isReferedByUser": "String",
+            "orderedOn": "Timestamp"
+        }
+    ],
+
+    "successfullReferals": [
+        //Sub Document
+        {
+            "referedByUserId": "String",
+            "referedToUserId": "String",
+            "referedCampainId": "String",
+            "referedCampainPackageInfo": {
+                "packageTitle": "4 Implamtations",
+                "packageAmount": "320",
+                "packageDiscount": "20",
+                "packageRewardAmount": "7"
+            }
+        }
+    ]
+}

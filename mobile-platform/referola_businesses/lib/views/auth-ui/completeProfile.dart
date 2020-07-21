@@ -4,7 +4,6 @@ import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
 import 'package:referola_businesses/views/auth-ui/phoneNumberSignIn.dart';
 import 'package:referola_businesses/views/homePage/homePage.dart';
 import '../../logic/auth/accountFun.dart';
-import '../../main.dart';
 import '../../ui-components/buttons/longButton.dart';
 
 class CompleteYourProfilePage extends StatefulWidget {
@@ -44,7 +43,7 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
           context, MaterialPageRoute(builder: (context) => HomePage()));
     }).catchError((e) {
       print(e);
-      CustomAlertBox().load(context, "Error", e);
+      CustomAlertBox().load(context, "Error", e.message);
     });
     setState(() {
       loading = false;
@@ -53,7 +52,6 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
    
     setState(() {
@@ -179,9 +177,6 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
                             formKey.currentState.save();
 
                             setBusiness();
-                          } else {
-                            CustomAlertBox()
-                                .load(context, "Error", "please verify");
                           }
                         }),
                       ],

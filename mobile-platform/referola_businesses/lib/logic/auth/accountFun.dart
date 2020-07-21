@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:referola_businesses/logic/getLocation/fetchLocationinfo.dart';
 import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
 import 'package:referola_businesses/views/auth-ui/authUiPage.dart';
@@ -45,26 +43,24 @@ class AccountFun{
   }
 
   Future<void> addBusinessProfile(BuildContext context, FirebaseUser user, String title, String email, String businessLogoImgUrl, String shortDes)async{
-    await user.updateEmail(email);
-    await user.reload();
 
     
     LocData locData = await GetLocation().fetch(context);
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-    final coordinates = new Coordinates(position.latitude, position.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
+    print(locData.address);
+
+
     await Firestore.instance.collection("businesses").document(user.uid).setData({
       "businessId": user.uid,
       "businessTitle": title,
       "email": email,
       "mobileNumber": user.phoneNumber,
-      "addressLine1": first.addressLine,
-      "addressCity": first.subAdminArea,
-      "addressState": first.adminArea,
-      "addressCountry": first.countryName,
-      "addressPincode": first.postalCode,
+      "addressName": locData.address[0].name,
+      "addressLocality": locData.address[0].locality,
+      "addressSubAdministrativeArea": locData.address[0].subAdministrativeArea,
+      "addressAdministrativeArea": locData.address[0].administrativeArea,
+      "addressCountry": locData.address[0].country,
+      "addressPincode": locData.address[0].postalCode,
       "latitude": locData.lat,
       "longitude": locData.long,
       "businessLogo": businessLogoImgUrl,
