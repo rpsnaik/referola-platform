@@ -92,13 +92,13 @@
                     "packageTitle": "2 Implamtations",
                     "packageAmount": "200",
                     "packageDiscount": "20",
-                    "packageRewardAmount": "3"
+                    "packageRewardDiscount": "3"
                 },
                 {
                     "packageTitle": "4 Implamtations",
                     "packageAmount": "320",
                     "packageDiscount": "20",
-                    "packageRewardAmount": "7"
+                    "packageRewardDiscount": "7"
                 }
             ]
         }
@@ -114,7 +114,7 @@
                 "packageTitle": "4 Implamtations",
                 "packageAmount": "320",
                 "packageDiscount": "20",
-                "packageRewardAmount": "7"
+                "packageRewardDiscount": "7"
             },
             "amountPaidByUser": "Double",
             "orderInfo": "String",
@@ -133,7 +133,7 @@
                 "packageTitle": "4 Implamtations",
                 "packageAmount": "320",
                 "packageDiscount": "20",
-                "packageRewardAmount": "7"
+                "packageRewardDiscount": "7"
             }
         }
     ]
