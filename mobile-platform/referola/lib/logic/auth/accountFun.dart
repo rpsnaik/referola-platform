@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:referola/logic/getLocation/fetchLocationInfo.dart';
 import 'package:referola/ui-components/buttons/customAlertBox.dart';
 import 'package:referola/views/auth-ui/authUIPage.dart';
+import 'package:referola/views/auth-ui/completeProfile.dart';
 import 'package:referola/views/homePage/homePage.dart';
 
 
@@ -17,8 +20,54 @@ class AccountFun{
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthUIPage()));
       }else{
         print("Signed in Successfully! - "+user.uid);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+        userProfileCheck(context, user);
       }
+    }).catchError((e){
+      print(e);
+      CustomAlertBox().load(context, "Error", e.message);
+    });
+  }
+
+
+    Future<void> userProfileCheck(BuildContext context, FirebaseUser user)async{
+    await Firestore.instance.collection("users").document(user.uid).get().then((DocumentSnapshot docData){
+      if(docData.data != null){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+      }else{
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CompleteYourProfilePage()));
+      }
+    }).catchError((e){
+      print(e);
+      CustomAlertBox().load(context, "Error", e.message);
+    });
+  }
+
+
+   Future<void> createUserProfile(BuildContext context, FirebaseUser user, String name, String profileImgUrl, DateTime dob)async{
+
+    
+    LocData locData = await GetLocation().fetch(context);
+
+    print(locData.address);
+
+
+    await Firestore.instance.collection("users").document(user.uid).setData({
+      "userId": user.uid,
+      "userLegalName": name,
+      "userEmail": user.email,
+      "userDateOfBirth": dob,
+      "addressName": locData.address[0].name,
+      "addressLocality": locData.address[0].locality,
+      "addressSubAdministrativeArea": locData.address[0].subAdministrativeArea,
+      "addressAdministrativeArea": locData.address[0].administrativeArea,
+      "addressCountry": locData.address[0].country,
+      "addressPincode": locData.address[0].postalCode,
+      "latitude": locData.lat,
+      "longitude": locData.long,
+      "userProfileImage": profileImgUrl,
+      "accountCreatedOn": FieldValue.serverTimestamp(),
+    }).then((E){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
     }).catchError((e){
       print(e);
       CustomAlertBox().load(context, "Error", e.message);

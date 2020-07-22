@@ -17,10 +17,7 @@ class _RegisterAccountState extends State<RegisterAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.blueGrey,
-        ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueGrey,
         title: Text("Register"),
       ),
       body: Container(

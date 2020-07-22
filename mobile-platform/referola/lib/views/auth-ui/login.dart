@@ -7,7 +7,7 @@ import 'package:referola/logic/auth/googleAuth.dart';
 import 'package:referola/ui-components/Forms/inputDecoration.dart';
 import 'package:referola/ui-components/buttons/longButton.dart';
 import 'package:referola/views/auth-ui/register.dart';
-import 'package:referola/views/homePage/homePage.dart';
+import '../../logic/auth/accountFun.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -23,12 +23,8 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.blueGrey),
-        backgroundColor: Colors.white,
-        title: Text("Log in", style: TextStyle(
-          color: Colors.blueGrey,
-        ),
-        ),
+        backgroundColor: Colors.blueGrey,
+        title: Text("Log in",),
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
@@ -101,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                             if(formKey.currentState.validate()){
                                 formKey.currentState.save();
                                 signIn(_email, _password);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                                AccountFun().accountStatusVerifier(context);
                               }
                           }),
                           SizedBox(
@@ -126,8 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     onPressed: () {
                                       googleSignIn().whenComplete(() => {
-                                        Navigator.pop(context),
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()))
+                                        AccountFun().accountStatusVerifier(context)
                                       });
                                     }
                                   ),
@@ -152,10 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     onPressed: () {
-                                      googleSignIn().whenComplete(() => {
-                                        Navigator.pop(context),
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()))
-                                      });
+                                     
                                     }
                                   ),
                                   ),

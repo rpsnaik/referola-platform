@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:referola_businesses/logic/auth/mobileAuth.dart';
+import 'package:referola_businesses/ui-components/Forms/textInputDecoration.dart';
 import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
 import 'package:referola_businesses/ui-components/buttons/longButton.dart';
 
@@ -91,10 +92,7 @@ class _PhonNumberSignInPageState extends State<PhonNumberSignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.blueGrey,
-        ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueGrey,
       ),
       body: Container(
         child: PageView(
@@ -121,19 +119,15 @@ class _PhonNumberSignInPageState extends State<PhonNumberSignInPage> {
                               Expanded(
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.all(20.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: TextFormField(
                                     keyboardType: TextInputType.phone,
                                     controller: phoneNumberController,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w900,
                                     ),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.zero,
-                                      labelText: "Enter your Phone Number",
-                                      labelStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    decoration: textInputDecoration.copyWith(
+                                      hintText: "Enter your phone Number",
                                       alignLabelWithHint: true,
                                       prefixIcon: CountryCodePicker(
                                         searchDecoration: InputDecoration(

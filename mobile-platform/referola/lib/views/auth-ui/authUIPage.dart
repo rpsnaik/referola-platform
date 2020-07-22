@@ -15,20 +15,19 @@ class _AuthUIPageState extends State<AuthUIPage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.white
+        statusBarColor: Colors.blueGrey
       ),
     );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text("referola", style: TextStyle(
-          color: Colors.blueGrey,
           fontSize: 25,
           fontWeight: FontWeight.w900,
          ),
         ),
         elevation: 2.0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.grey[100],
       body: Container(
@@ -58,7 +57,7 @@ class _AuthUIPageState extends State<AuthUIPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   CustomLongButton()
-                      .loadButton(context, "Sign in with Mobile Number", () {
+                      .loadButton(context, "Sign in", () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                   }),
                 ],

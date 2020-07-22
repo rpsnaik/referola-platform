@@ -14,20 +14,19 @@ class _AuthUIPageState extends State<AuthUIPage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.white
+        statusBarColor: Colors.blueGrey,
       ),
     );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text("referola", style: TextStyle(
-          color: Colors.blueGrey,
           fontSize: 25,
           fontWeight: FontWeight.w900,
          ),
         ),
         elevation: 2.0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.grey[100],
       body: Container(
