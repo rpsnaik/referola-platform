@@ -90,6 +90,8 @@
             "campainCreatedOn": "String",
             "camapinUpdatedOn": "String",
             "categories": "List<String>",
+            "ratingTotal": "Integer",
+            "ratingCount": "Interger",
             "packages": "List<Map<String, dynamic>>",
             "packages (Ex)": [
                 {
@@ -105,6 +107,18 @@
                     "packageRewardDiscount": "7"
                 }
             ]
+        }
+    ],
+
+    "rating": [
+        {
+            "ratingId": "String",
+            "ratingComment": "String",
+            "rateValue": "Integer",
+            "ratedOn": "Timestamp",
+            "rateUpdatedOn": "Timestamp",
+            "ratedForCampain": "String",
+            "ratedByUserId": "String"
         }
     ],
 
