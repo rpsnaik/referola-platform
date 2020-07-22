@@ -7,7 +7,7 @@ class CustomLongButton {
   Widget loadButton(BuildContext context, String title, Function onPressed) {
     return RaisedButton(
       padding: EdgeInsets.all(13.0),
-      color: Colors.blueGrey,
+      color: Colors.red,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       onPressed: onPressed,
       child: Row(

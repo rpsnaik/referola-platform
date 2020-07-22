@@ -1,18 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:referola_businesses/data/weeks.dart';
+import 'package:referola_businesses/logic/auth/accountFun.dart';
 import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
-import 'package:referola_businesses/views/auth-ui/phoneNumberSignIn.dart';
-import 'package:referola_businesses/views/homePage/homePage.dart';
-import '../../logic/auth/accountFun.dart';
+import 'package:referola_businesses/ui-components/buttons/primaryButton.dart';
 import '../../ui-components/buttons/longButton.dart';
 
-class CompleteBusinessProfile extends StatefulWidget {
+class AddBusinessProfile extends StatefulWidget {
+  final ValueChanged<bool> added;
+  AddBusinessProfile({@required this.added});
   @override
-  _CompleteBusinessProfileState createState() =>
-      _CompleteBusinessProfileState();
+  _AddBusinessProfileState createState() =>
+      _AddBusinessProfileState();
 }
 
-class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
+class _AddBusinessProfileState extends State<AddBusinessProfile> {
   bool loading = false;
 
   String title, email, businessLogoImgUrl, shortDes;
@@ -20,6 +23,10 @@ class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
   FirebaseUser user;
 
   final formKey = GlobalKey<FormState>();
+
+  TimeOfDay startTime, closeTime;
+  List holidays = [];
+
 
   onLoad() async {
     setState(() {
@@ -35,13 +42,12 @@ class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
     setState(() {
       loading = true;
     });
-    await AccountFun()
-        .addBusinessProfile(
-            context, user, title, email, businessLogoImgUrl, shortDes)
-        .then((E) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    }).catchError((e) {
+    await BusinessesFun().addBusinessProfile(context, user, title, email, null, null, shortDes, startTime, closeTime, holidays).then((E){
+      setState(() {
+        widget.added(true);
+      });
+      Navigator.pop(context);
+    }).catchError((e){
       print(e);
       CustomAlertBox().load(context, "Error", e.message);
     });
@@ -53,10 +59,6 @@ class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
   @override
   void initState() {
     super.initState();
-   
-    setState(() {
-      
-    });
     onLoad();
   }
 
@@ -82,9 +84,9 @@ class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Enter Your Business Name"),
+                        Text("Enter your Business Name"),
                         TextFormField(
                           validator: (String val) {
                             if (val.length < 3) {
@@ -102,8 +104,32 @@ class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
                             hintText: "Ex : Techno Park LLC",
                           ),
                         ),
+                        
                         SizedBox(
-                          height: 35,
+                          height: 15,
+                        ),
+                        
+                        Text("What your Business does"),
+                        TextFormField(
+                          validator: (String val) {
+                            if (val.length < 3) {
+                              return "Provide long description";
+                            }
+                            return null;
+                          },
+                          onSaved: (String val) {
+                            setState(() {
+                              shortDes = val.trim();
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Description",
+                            hintText: "Ex : TechnoPark LLC",
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 15,
                         ),
                         Text("Enter your email address"),
                         TextFormField(
@@ -125,58 +151,90 @@ class _CompleteBusinessProfileState extends State<CompleteBusinessProfile> {
                             hintText: "Ex : yourname@example.com",
                           ),
                         ),
-                        SizedBox(
-                          height: 35,
-                        ),
-                        TextFormField(
-                          validator: (String val) {
-                            if (val.length < 3) {
-                              return "Enter a valid url";
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            setState(() {
-                              businessLogoImgUrl = val.trim();
-                            });
-                          },
-                          decoration: InputDecoration(
-                            labelText: "Logo Url",
-                            hintText: "Ex : https://logourl.com",
-                          ),
-                        ),
-                        TextFormField(
-                          validator: (String val) {
-                            if (val.length < 3) {
-                              return "Provide long description";
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            setState(() {
-                              shortDes = val.trim();
-                            });
-                          },
-                          decoration: InputDecoration(
-                            labelText: "Description",
-                            hintText: "Ex : Techno Park LLC",
-                          ),
-                        ),
-                        MaterialButton(
-                          child: Text("Logout"),
-                          onPressed: () => {
-                            FirebaseAuth.instance.signOut(),
-                            Navigator.pop(context),
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  PhonNumberSignInPage(),
-                            ),
-                           ),
-                          },
-                        ),
-                        CustomLongButton().loadButton(context, "Create", () {
-                          if (formKey.currentState.validate()) {
-                            formKey.currentState.save();
 
-                            setBusiness();
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Text("Business Start Time"),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        PrimaryButton().loadButton(context, startTime == null ? "Select the Business Start Time" : startTime.format(context), ()async{
+                          await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now()
+                          ).then((TimeOfDay time){
+                            setState(() {
+                              startTime = time;
+                            });
+                          }).catchError((e){
+                            print(e);
+                            CustomAlertBox().load(context, "Error", e.message);
+                          });
+                        }),
+
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Text("Business Close Time"),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        PrimaryButton().loadButton(context, closeTime == null ? "Select the Business Close Time" : closeTime.format(context), ()async{
+                          await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now()
+                          ).then((TimeOfDay time){
+                            setState(() {
+                              closeTime = time;
+                            });
+                          }).catchError((e){
+                            print(e);
+                            CustomAlertBox().load(context, "Error", e.message);
+                          });
+                        }),
+
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        
+                        Text("Select Holidays in week"),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        
+                        PrimaryButton().loadButton(context, "Select Holidays", ()async{
+                          holidays = await showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return MultiSelectListDialog(
+                                items: week.map((item) => 
+                                  MultiSelectItem(item, item)).toList(),
+                                title: "Business Holidays",
+                                initialSelectedItems: holidays,
+                              );
+                            },
+                          );
+                          setState(() {
+                            
+                          });
+                        }),
+
+                        Text(holidays.toString()),
+
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                       
+                        CustomLongButton().loadButton(context, "Create", () {
+                          if(startTime != null && closeTime != null){
+                            if (formKey.currentState.validate()) {
+                              formKey.currentState.save();
+
+                              setBusiness();
+                            }
+                          }else{
+                            CustomAlertBox().load(context, "Incomplete Details!", "Please, Select the Business Start time and Close Time");
                           }
                         }),
                       ],

@@ -3,6 +3,9 @@ import 'package:referola_businesses/logic/auth/accountFun.dart';
 
 void main() => runApp(
   MaterialApp(
+    theme: ThemeData(
+      primaryColor: Colors.red
+    ),
     home: SplashScreen(),
     debugShowCheckedModeBanner: false,
   ),

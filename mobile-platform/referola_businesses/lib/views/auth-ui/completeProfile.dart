@@ -8,7 +8,7 @@ import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
 import 'package:referola_businesses/ui-components/buttons/longButton.dart';
 import 'package:referola_businesses/ui-components/buttons/primaryButton.dart';
 import 'package:referola_businesses/ui-components/uploadToStorage/uploadFile.dart';
-import 'package:referola_businesses/views/homePage/homePage.dart';
+import 'package:referola_businesses/views/myBusinesses/myBusinesses.dart';
 
 class CompleteYourProfilePage extends StatefulWidget {
   @override
@@ -46,7 +46,7 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
       isLoading = true;
     });
     await AccountFun().createUserProfile(context, legalName, dateOfBirth, profileImageUrl, emailId).then((E){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyBusinesses()));
     }).catchError((e){  
       print(e);
       CustomAlertBox().load(context, "Error", e.message);
@@ -89,7 +89,7 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
                       Center(
                         child: InkWell(
                           onTap: ()async{
-                            final StorageReference storageReference = FirebaseStorage().ref().child("users/profileImages/"+user.uid);
+                            final StorageReference storageReference = FirebaseStorage().ref().child("businessUsers/profileImages/"+user.uid);
                             setState(() {
                               profileImageUploading = true;
                             });
@@ -138,7 +138,7 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
                         },
                         decoration: InputDecoration(
                           labelText: "Full Name",
-                          hintText: "Ex : Richard Hendriks"
+                          hintText: "Ex : John"
                         ),
                       ),
                       SizedBox(
@@ -165,23 +165,23 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
                       SizedBox(
                         height: 30.0,
                       ),
-                      Text("Enter your EmailId (Option)", style: TextStyle(
+                      Text("Enter your EmailId", style: TextStyle(
                         fontFamily: "Nunito Sans Bold"
                       ),),
                       TextFormField(
-                        // validator: (String val){
-                        //   if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val.trim())){
-                        //     return "Enter valid Email Address";
-                        //   }
-                        //   return null;
-                        // },
+                        validator: (String val){
+                          if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val.trim())){
+                            return "Enter valid Email Address";
+                          }
+                          return null;
+                        },
                         onSaved: (String val){
                           setState(() {
                             emailId = val.trim();
                           });
                         },
                         decoration: InputDecoration(
-                          labelText: "Email Id (If you have)",
+                          labelText: "Email Id",
                           hintText: "Ex : name@example.com"
                         ),
                       ),

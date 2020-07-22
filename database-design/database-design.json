@@ -68,7 +68,11 @@
             "addressPincode": "String",
 
             "businessOwnerId": "String (uid)",
-            "businessUserOn": "Timestamp",
+            "businessCreatedOn": "Timestamp",
+
+            "businessHolidaysOn": "List<String>",
+            "businessStartTime": "String",
+            "businessCloseTime": "String",
 
             "wallet": "Double"
         }
