@@ -136,3 +136,70 @@ class BusinessesFun{
   }
 
 }
+
+
+class CampainFun {
+  List<DocumentSnapshot> campains = [];
+   Future<void> addCampains(BuildContext context, FirebaseUser user, String title, String subTitle, String desc, String campainBannerImgUrl,int ratCount )async{
+
+    
+
+    DocumentReference campainRef = Firestore.instance.collection("campains").document();
+    await campainRef.setData({
+      "campainId": campainRef.documentID,
+      "campainStatus": true,
+      "campainTitle": title,
+      "campainSubTitle": subTitle,
+      "campainDescription": desc,
+      "campainBannerImgUrl": campainBannerImgUrl,
+      "campainCreatedOn": Timestamp.now(),
+      "camapinUpdatedOn": Timestamp.now(),
+      "categories": [],
+      "ratingTotal": 5,
+      "ratingCount": ratCount,
+      "packages": [
+        {
+            "packageTitle": "2 Implamtations",
+            "packageAmount": 200,
+            "packageDiscount": 20,
+            "packageRewardDiscount": 3
+        },
+        {
+            "packageTitle": "4 Implamtations",
+            "packageAmount": 320,
+            "packageDiscount": 20,
+            "packageRewardDiscount": 7
+        }
+            ]
+
+    }).then((E){
+      print("Added Successfully!");
+    }).catchError((e){
+      print(e);
+      CustomAlertBox().load(context, "Error", e.message);
+    });
+  }
+
+  
+    Future<void> loadCampains(BuildContext context)async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    await Firestore.instance.collection("campains").where("campainId", isEqualTo: user.uid).orderBy("campainCreatedOn", descending: false).limit(20).getDocuments().then((QuerySnapshot qSanpData){
+      campains = qSanpData.documents;
+    }).catchError((e){
+      print(e);
+      CustomAlertBox().load(context, "Error", e.message);
+    });
+  }
+
+
+  Future<void> loadMoreCampains(BuildContext context)async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    await Firestore.instance.collection("campains").where("campainId", isEqualTo: user.uid).orderBy("campainCreatedOn", descending: false).startAfterDocument(campains[campains.length-1]).limit(20).getDocuments().then((QuerySnapshot qSanpData){
+      campains.addAll(qSanpData.documents);
+    }).catchError((e){
+      print(e);
+      CustomAlertBox().load(context, "Error", e.message);
+    });
+  }
+
+}

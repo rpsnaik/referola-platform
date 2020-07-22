@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:referola_businesses/views/myBusinesses/businessDashboard/campains/addCampains.dart';
 
 class BusinessDashboard extends StatefulWidget {
   final DocumentSnapshot businessData;
@@ -15,6 +16,14 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
       drawer: Drawer(),
       appBar: AppBar(
         title: Text("Dashboard"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddCampains()));
+            },
+            )
+        ],
       ),
     );
   }

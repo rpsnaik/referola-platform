@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:referola_businesses/ui-components/buttons/longButton.dart';
 import 'package:referola_businesses/views/auth-ui/phoneNumberSignIn.dart';
 
@@ -12,11 +11,6 @@ class AuthUIPage extends StatefulWidget {
 class _AuthUIPageState extends State<AuthUIPage> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.blueGrey,
-      ),
-    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:referola_businesses/logic/auth/accountFun.dart';
 
 void main() => runApp(
   MaterialApp(
     theme: ThemeData(
-      primaryColor: Colors.red
+      primaryColor: Colors.red[300],
     ),
     home: SplashScreen(),
     debugShowCheckedModeBanner: false,
@@ -28,6 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Theme.of(context).primaryColor
+      ),
+    );
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(30.0),

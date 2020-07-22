@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:referola_businesses/logic/auth/accountFun.dart';
-import 'package:referola_businesses/views/auth-ui/completeBusinessProfile.dart';
-import 'package:referola_businesses/views/myBusinesses/businessDashboard/dashboard.dart';
-import 'package:referola_businesses/views/myBusinesses/userAtBusinessLoc.dart';
+import 'package:referola_businesses/views/myBusinesses/businessDashboard/campains/addCampains.dart';
+import '../../../../logic/auth/accountFun.dart';
 
-class MyBusinesses extends StatefulWidget {
+
+class MyCampains extends StatefulWidget {
   @override
-  _MyBusinessesState createState() => _MyBusinessesState();
+  _MyCampainsState createState() => _MyCampainsState();
 }
 
-class _MyBusinessesState extends State<MyBusinesses> {
-  final BusinessesFun businessesFun = BusinessesFun();
+class _MyCampainsState extends State<MyCampains> {
+  final CampainFun campainFun = CampainFun();
   
   ScrollController _scrollController = ScrollController();
   bool getmoreflag = false;
@@ -23,7 +23,7 @@ class _MyBusinessesState extends State<MyBusinesses> {
     setState(() {
       isLoading = true;
     });
-    await businessesFun.loadBusinesses(context);
+    await campainFun.loadCampains(context);
     setState(() {
       isLoading = false;
     });
@@ -33,33 +33,29 @@ class _MyBusinessesState extends State<MyBusinesses> {
     setState(() {
       isLoadingMore = true;
     });
-    await businessesFun.loadMoreBusinesses(context);
+    await campainFun.loadMoreCampains(context);
     setState(() {
       isLoadingMore = false;
       getmoreflag = false;
     });
   }
 
-  addBusinessFun()async{
-    bool shopLocRes = false;
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAtBusinessLocation(atLoc: (val){
-      setState(() {
-        shopLocRes = val;
-      });
-    },)));
+  addCampainFun()async{
+    
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => AddCampains()));
 
-    if(shopLocRes){
-      bool res = false;
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=> AddBusinessProfile(added: (bool value) { 
-        setState(() {
-          res = value;
-        });
-      },)));
+    // if(shopLocRes){
+    //   bool res = false;
+    //   await Navigator.push(context, MaterialPageRoute(builder: (context)=> AddBusinessProfile(added: (bool value) { 
+    //     setState(() {
+    //       res = value;
+    //     });
+    //   },)));
 
-      if(res){
-        onLoadActivity();
-      }
-    }
+    //   if(res){
+    //     onLoadActivity();
+    //   }
+    // }
 
     
   }
@@ -94,7 +90,7 @@ class _MyBusinessesState extends State<MyBusinesses> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: (){
-              addBusinessFun();
+              addCampainFun();
             },
           )
         ],
@@ -104,9 +100,9 @@ class _MyBusinessesState extends State<MyBusinesses> {
       ) : ListView(
         controller: _scrollController,
         children: <Widget>[
-          businessesFun.businesses.length == 0 ? InkWell(
+          campainFun.campains.length == 0 ? InkWell(
             onTap: (){
-              addBusinessFun();
+              addCampainFun();
             },
             child: Container(
               height: 200.0,
@@ -115,7 +111,6 @@ class _MyBusinessesState extends State<MyBusinesses> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Icon(FontAwesomeIcons.plus, color: Colors.grey,),
                     SizedBox(
                       height: 20.0,
                     ),
@@ -130,9 +125,9 @@ class _MyBusinessesState extends State<MyBusinesses> {
           ): ListView.builder(
             primary: false,
             shrinkWrap: true,
-            itemCount: businessesFun.businesses.length + 1,
+            itemCount: campainFun.campains.length + 1,
             itemBuilder: (context, i){
-              if(i == businessesFun.businesses.length){
+              if(i == campainFun.campains.length){
                 if(isLoadingMore){
                   return Center(
                     child: CircularProgressIndicator(),
@@ -145,12 +140,9 @@ class _MyBusinessesState extends State<MyBusinesses> {
                   borderRadius: BorderRadius.circular(8)
                 ),
                 child: ListTile(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> BusinessDashboard(businessData: businessesFun.businesses[i],) ));
-                  },
                   leading: Icon(FontAwesomeIcons.storeAlt),
-                  title: Text(businessesFun.businesses[i].data['businessTitle']),
-                  subtitle: Text(businessesFun.businesses[i].data['businessShortDescription']),
+                  title: Text(campainFun.campains[i].data['campainTitle']),
+                  subtitle: Text(campainFun.campains[i].data['campainSubTitle']),
                 ),
               );
             }
