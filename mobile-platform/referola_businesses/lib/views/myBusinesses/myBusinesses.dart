@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:referola_businesses/logic/auth/accountFun.dart';
 import 'package:referola_businesses/views/auth-ui/completeBusinessProfile.dart';
-import 'package:referola_businesses/views/myBusinesses/businessDashboard/dashboard.dart';
+import 'package:referola_businesses/views/myBusinesses/homePage.dart';
 import 'package:referola_businesses/views/myBusinesses/userAtBusinessLoc.dart';
 
 class MyBusinesses extends StatefulWidget {
@@ -146,7 +146,7 @@ class _MyBusinessesState extends State<MyBusinesses> {
                 ),
                 child: ListTile(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> BusinessDashboard(businessData: businessesFun.businesses[i],) ));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(businessData: businessesFun.businesses[i],) ));
                   },
                   leading: Icon(FontAwesomeIcons.storeAlt),
                   title: Text(businessesFun.businesses[i].data['businessTitle']),

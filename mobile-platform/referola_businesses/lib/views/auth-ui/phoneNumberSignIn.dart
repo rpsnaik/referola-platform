@@ -2,9 +2,9 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:referola_businesses/logic/auth/mobileAuth.dart';
-import 'package:referola_businesses/ui-components/Forms/textInputDecoration.dart';
 import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
 import 'package:referola_businesses/ui-components/buttons/longButton.dart';
+import 'package:referola_businesses/ui-components/forms/textInputDecoration.dart';
 
 
 class PhonNumberSignInPage extends StatefulWidget {
