@@ -35,17 +35,8 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
     setState(() {
       isLoading = true;
     });
-    user = await FirebaseAuth.instance.currentUser();
-    LocationLogic locationLogic = LocationLogic();
-                        
-    if(await locationLogic.verifyPermission()){
-      print("Permission Granted");
-
-    }else{
-      print("Location Required!");
-      CustomAlertBox().load(context, "Location Required!", "Please enable location permission!");
-    }
     locData = await GetLocation().fetch(context);
+    user = await FirebaseAuth.instance.currentUser();
     setState(() {
       isLoading = false;
     });
@@ -55,7 +46,7 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
     setState(() {
       isLoading = true;
     });
-    await AccountFun().createUserProfile(context, user, legalName, profileImageUrl,dateOfBirth).then((E){
+    await AccountFun().createUserProfile(context, user, legalName, profileImageUrl,dateOfBirth, locData).then((E){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
     }).catchError((e){  
       print(e);
@@ -210,13 +201,13 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
                         height: 5,
                       ),
                       TextFormField(
-                        // validator: (String val){
-                        //   if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val.trim())){
-                        //     return "Enter valid Email Address";
-                        //   }
-                        //   return null;
-                        // },
-                        enabled: false,
+                        validator: (String val){
+                          if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val.trim())){
+                            return "Enter valid Email Address";
+                          }
+                          return null;
+                        },
+                        enabled: user.email != null ? false : true,
                         initialValue: user.email,
                         decoration: textInputDecoration
                       ),
@@ -257,20 +248,14 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
                           SizedBox(
                             width: 5,
                           ),
-                          Text("EmailId", style: TextStyle(
+                          Text("Location Name", style: TextStyle(
                             fontFamily: "Nunito Sans Bold"
                           ),),
                         ],
                       ),
                       SizedBox(height: 5,),
                        TextFormField(
-                        // validator: (String val){
-                        //   if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val.trim())){
-                        //     return "Enter valid Email Address";
-                        //   }
-                        //   return null;
-                        // },
-                         enabled: false,
+                        enabled: false,
                         initialValue: locData.address[0].locality,
                         decoration: textInputDecoration
                       ),

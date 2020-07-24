@@ -43,12 +43,7 @@ class AccountFun{
   }
 
 
-   Future<void> createUserProfile(BuildContext context, FirebaseUser user, String name, String profileImgUrl, DateTime dob)async{
-
-    
-    LocData locData = await GetLocation().fetch(context);
-
-    print(locData.address);
+   Future<void> createUserProfile(BuildContext context, FirebaseUser user, String name, String profileImgUrl, DateTime dob, LocData locData)async{
 
 
     await Firestore.instance.collection("users").document(user.uid).setData({

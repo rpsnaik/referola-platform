@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:referola_businesses/models/filesModel.dart';
 import 'package:referola_businesses/ui-components/buttons/customAlertBox.dart';
 
 class FirebaseStorageUploadTask {
@@ -29,54 +27,15 @@ class FirebaseStorageUploadTask {
     return fileUrl;
   }
 
-
-  Future<FilesModel> uploadFile(BuildContext context, String path) async {
+  Future<String> uploadBannerImage(BuildContext context, StorageReference storageReference, File croppedImage) async {
     String fileUrl;
-    String titleName;
-    
-    await FilePicker.getFile(
-      type: FileType.custom,
-    ).then((File file)async{
-      if (file != null) {
-        print(file.path);
-        print("Starting to Upload");
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context){
-            return Scaffold(
-              backgroundColor: Colors.black.withOpacity(0.5),
-              body: Container(
-                color: Colors.black.withOpacity(0.5),
-                child: Center(
-                  child: Text("Uploading...", style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "Nunito Sans Bold"
-                  ),),
-                ),
-              ),
-            );
-          }
-        );
-        StorageReference storageReference = FirebaseStorage.instance.ref().child(path);
-        StorageUploadTask task = storageReference.putFile(file);
-        print("Upload started");
-        await task.onComplete;
-        print("Uploaded");
-        Navigator.pop(context);
-        fileUrl = await storageReference.getDownloadURL();
+    StorageUploadTask task = storageReference.putFile(croppedImage);
+    print("Upload started");
+    await task.onComplete;
+    print("Uploaded");
+    fileUrl = await storageReference.getDownloadURL();
 
-        titleName = file.path.split("/").last;
-      }
-    }).catchError((e){
-      print(e);
-      CustomAlertBox().load(context, 'Error', e.message);
-    });
-
-    return FilesModel(
-      fileTitle: titleName,
-      fileUrl: fileUrl
-    );
+    return fileUrl;
   }
 
 }
