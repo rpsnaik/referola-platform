@@ -17,7 +17,7 @@ class AccountFun{
     await FirebaseAuth.instance.currentUser().then((FirebaseUser user)async{
       if(user == null){
         // Redirect to Sign In Page
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthUIPage()));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthUIPage()), (route) => false);
       }else{
         print("Signed in Successfully! - "+user.uid);
         userProfileCheck(context, user);
@@ -32,9 +32,9 @@ class AccountFun{
     Future<void> userProfileCheck(BuildContext context, FirebaseUser user)async{
     await Firestore.instance.collection("users").document(user.uid).get().then((DocumentSnapshot docData){
       if(docData.data != null){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
       }else{
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CompleteYourProfilePage()));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => CompleteYourProfilePage()), (route) => false);
       }
     }).catchError((e){
       print(e);

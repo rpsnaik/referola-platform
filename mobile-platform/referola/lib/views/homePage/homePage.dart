@@ -18,9 +18,9 @@ class HomePage extends StatelessWidget {
         child: Center(
           child: MaterialButton(
             onPressed: () {
-              googleSignout();
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AuthUIPage()));
+              googleSignout().then((value) {
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthUIPage()), (route) => false);
+              });
             },
             child: Text("log out"),
           ),

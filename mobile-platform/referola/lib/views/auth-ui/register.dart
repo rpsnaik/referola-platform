@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:referola/logic/auth/accountFun.dart';
 import 'package:referola/logic/auth/emailAuth.dart';
 import 'package:referola/ui-components/Forms/inputDecoration.dart';
 import 'package:referola/ui-components/buttons/longButton.dart';
-import 'package:referola/views/homePage/homePage.dart';
+
 
 
 class RegisterAccount extends StatefulWidget {
@@ -13,6 +14,9 @@ class RegisterAccount extends StatefulWidget {
 class _RegisterAccountState extends State<RegisterAccount> {
   String _email, _password, pass1;
   final formKey = GlobalKey<FormState>();
+    final TextEditingController _pass = TextEditingController();
+  final TextEditingController _confirmPass = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +58,8 @@ class _RegisterAccountState extends State<RegisterAccount> {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: _pass,
+                          obscureText: true,
                           decoration: textInputDecoration.copyWith(
                             hintText: "Password",
                             prefixIcon: Icon(Icons.lock)
@@ -61,9 +67,6 @@ class _RegisterAccountState extends State<RegisterAccount> {
                           validator: (String val){
                             if(val.length < 6){
                               return "Password should be of atleast 6 charecters!";
-                            }
-                            if(val != pass1){
-                              return "Password Mismatch!";
                             }
                             return null;
                           },
@@ -77,6 +80,8 @@ class _RegisterAccountState extends State<RegisterAccount> {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: _confirmPass,
+                          obscureText: true,
                           decoration: textInputDecoration.copyWith(
                             hintText: "Re-enter Password",
                             prefixIcon: Icon(Icons.lock)
@@ -85,7 +90,7 @@ class _RegisterAccountState extends State<RegisterAccount> {
                             if(val.length < 6){
                               return "Password should be of atleast 6 charecters!";
                             }
-                            if(val != _password){
+                             if(val != _pass.text){
                               return "Password Mismatch!";
                             }
                             return null;
@@ -102,8 +107,9 @@ class _RegisterAccountState extends State<RegisterAccount> {
                         CustomLongButton().loadButton(context, "Register", (){
                           formKey.currentState.save();
                             if(formKey.currentState.validate()){
-                              signUp(_email, _password);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) =>HomePage()));
+                              signUp(_email, _password).then((value) {
+                                AccountFun().accountStatusVerifier(context);
+                              });
                             }
                         }),
                       ],

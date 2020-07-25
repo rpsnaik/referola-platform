@@ -96,8 +96,9 @@ class _LoginPageState extends State<LoginPage> {
                           CustomLongButton().loadButton(context, "Login", (){
                             if(formKey.currentState.validate()){
                                 formKey.currentState.save();
-                                signIn(_email, _password);
-                                AccountFun().accountStatusVerifier(context);
+                                signIn(_email, _password).then((value) {
+                                  AccountFun().accountStatusVerifier(context);
+                                });
                               }
                           }),
                           SizedBox(
