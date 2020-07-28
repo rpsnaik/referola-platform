@@ -21,9 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
         title: Text("Log in",),
       ),
       body: Container(

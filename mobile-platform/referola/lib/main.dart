@@ -4,6 +4,10 @@ import 'package:referola/logic/auth/accountFun.dart';
 
 void main() => runApp(
   MaterialApp(
+    theme: ThemeData(
+      primaryColor: Colors.black,
+      fontFamily: "Proxima Nova"
+    ),
     home: SplashScreen(),
     debugShowCheckedModeBanner: false,
   ),

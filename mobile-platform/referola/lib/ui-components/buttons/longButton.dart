@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 class CustomLongButton {
   Widget loadButton(BuildContext context, String title, Function onPressed) {
     return RaisedButton(
-      padding: EdgeInsets.all(13.0),
-      color: Colors.blueGrey,
+      padding: EdgeInsets.all(15.0),
+      color: Colors.black,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       onPressed: onPressed,
       child: Row(
@@ -18,8 +18,9 @@ class CustomLongButton {
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 15.0,
-              fontFamily: "Nunito Sans Bold",
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: "Proxima Nova",
             ),
           )
         ],

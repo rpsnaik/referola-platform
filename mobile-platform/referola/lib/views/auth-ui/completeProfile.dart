@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:referola/logic/dateTimeFormatter/timeStampToDate.dart';
-import 'package:referola/logic/getLocation/fetchLocationInfo.dart';
 import 'package:referola/ui-components/Forms/inputDecoration.dart';
 import 'package:referola/ui-components/uploadToStorage/uploadFile.dart';
 import '../../logic/auth/accountFun.dart';
@@ -23,7 +22,6 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
 
   String legalName, profileImageUrl, phoneNum;
   DateTime dateOfBirth;
-  LocData locData; 
 
   bool profileImageUploading = false;
 
@@ -35,7 +33,6 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
     setState(() {
       isLoading = true;
     });
-    locData = await GetLocation().fetch(context);
     user = await FirebaseAuth.instance.currentUser();
     setState(() {
       isLoading = false;
@@ -67,7 +64,6 @@ class _CompleteYourProfilePageState extends State<CompleteYourProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
         title: Text("Complete your Profile", style: TextStyle(
           fontFamily: "Nunito Sans Bold"
         ),),

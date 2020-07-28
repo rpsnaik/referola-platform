@@ -8,20 +8,26 @@ import 'package:referola/views/auth-ui/authUIPage.dart';
 import 'package:referola/views/auth-ui/completeProfile.dart';
 import 'package:referola/views/homePage/homePage.dart';
 
-
+LocData locData;
 
 
 class AccountFun{
 
   Future<void> accountStatusVerifier(BuildContext context)async{
     await FirebaseAuth.instance.currentUser().then((FirebaseUser user)async{
-      if(user == null){
-        // Redirect to Sign In Page
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthUIPage()), (route) => false);
+      locData = await GetLocation().fetch(context);
+      if(locData == null){
+        print("We need location to run");
       }else{
-        print("Signed in Successfully! - "+user.uid);
-        userProfileCheck(context, user);
+        if(user == null){
+          // Redirect to Sign In Page
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthUIPage()), (route) => false);
+        }else{
+          print("Signed in Successfully! - "+user.uid);
+          userProfileCheck(context, user);
+        }
       }
+      
     }).catchError((e){
       print(e);
       CustomAlertBox().load(context, "Error", e.message);
@@ -43,7 +49,7 @@ class AccountFun{
   }
 
 
-   Future<void> createUserProfile(BuildContext context, FirebaseUser user, String name, String profileImgUrl, DateTime dob, LocData locData)async{
+  Future<void> createUserProfile(BuildContext context, FirebaseUser user, String name, String profileImgUrl, DateTime dob, LocData locData)async{
 
 
     await Firestore.instance.collection("users").document(user.uid).setData({
